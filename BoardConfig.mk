@@ -14,23 +14,16 @@
 # limitations under the License.
 #
 
+FORCE_32_BIT := true
 DEVICE_PATH := device/oppo/A37
 
 # Architecture
-TARGET_BOARD_SUFFIX := _64
-TARGET_ARCH := arm64
+TARGET_BOARD_SUFFIX := _32
+TARGET_ARCH := arm
 TARGET_ARCH_VARIANT := armv8-a
-TARGET_CPU_ABI := arm64-v8a
-TARGET_CPU_ABI2 :=
+TARGET_CPU_ABI := armeabi-v7a
+TARGET_CPU_ABI2 := armeabi
 TARGET_CPU_VARIANT := cortex-a53
-
-TARGET_2ND_ARCH := arm
-TARGET_2ND_ARCH_VARIANT := armv7-a-neon
-TARGET_2ND_CPU_ABI := armeabi-v7a
-TARGET_2ND_CPU_ABI2 := armeabi
-TARGET_2ND_CPU_VARIANT := cortex-a53
-
-TARGET_USES_64_BIT_BINDER := true
 
 TARGET_BOARD_PLATFORM := msm8916
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno306
@@ -60,18 +53,39 @@ BOARD_RECOVERYIMAGE_PARTITION_SIZE := 33554432
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2859466752
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 11632902144
 
+# Assert
+TARGET_OTA_ASSERT_DEVICE := A37f
+
+# Crypto
+TW_INCLUDE_CRYPTO := true
+TARGET_CRYPTFS_HW_PATH := vendor/qcom/opensource/commonsys/cryptfs_hw
+
 # Recovery
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/etc/twrp.fstab
-TARGET_RECOVERY_PIXEL_FORMAT := "RGB_565"
+BOARD_HAS_NO_SELECT_BUTTON := true
+TARGET_RECOVERY_PIXEL_FORMAT := "RGBA_8888"
 
 # TWRP specific build flags
-TW_THEME := portrait_hdpi
-RECOVERY_GRAPHICS_USE_LINELENGTH := true
+TW_DEFAULT_LANGUAGE := en-US
 TW_NO_USB_STORAGE := true
 BOARD_SUPPRESS_SECURE_ERASE := true
-RECOVERY_SDCARD_ON_DATA := true
+BOARD_HAS_REMOVABLE_STORAGE := true
+TW_MAX_BRIGHTNESS := 100
+TW_DEFAULT_BRIGHTNESS := "70"
 BOARD_HAS_NO_REAL_SDCARD := true
-TW_INPUT_BLACKLIST := "accelerometer"
 TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
 TW_IGNORE_ABS_MT_TRACKING_ID := true
+TW_USE_TOOLBOX := true
+TW_CRYPTO_USE_SBIN_VOLD := true
+
+#adbd insecure
+BOARD_ALWAYS_INSECURE := true
+
+# Timezone package
+PRODUCT_COPY_FILES += \
+    system/timezone/output_data/iana/tzdata:recovery/root/system_root/system/usr/share/zoneinfo/tzdata
+
+# LZMA ramdisk compression
+LZMA_RAMDISK_TARGETS := recovery
+LZMA_COMPRESSION := -9
