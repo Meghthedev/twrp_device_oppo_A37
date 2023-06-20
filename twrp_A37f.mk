@@ -16,43 +16,34 @@
 # limitations under the License.
 #
 
+# Custom vendor used in build tree (automatically taken from prefix of this filename)
+CUSTOM_VENDOR := $(lastword $(subst /, ,$(firstword $(subst _, ,$(firstword $(MAKEFILE_LIST))))))
+
+# OEM Info (automatically taken from device tree path)
+BOARD_VENDOR := $(or $(word 2,$(subst /, ,$(firstword $(MAKEFILE_LIST)))),$(value 2))
+
+# Release name (automatically taken from this file's suffix)
+PRODUCT_RELEASE_NAME := $(lastword $(subst /, ,$(lastword $(subst _, ,$(firstword $(subst ., ,$(MAKEFILE_LIST)))))))
+
+# Define hardware platform
+PRODUCT_PLATFORM := msm8916
+
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product-if-exists, $(SRC_TARGET_DIR)/product/embedded.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
-# Inherit some common Omni stuff.
-$(call inherit-product, vendor/omni/config/common.mk)
-$(call inherit-product, vendor/omni/config/gsm.mk)
+# Inherit from our custom product configuration
+$(call inherit-product, vendor/$(CUSTOM_VENDOR)/config/common.mk)
 
 # Inherit from A37f device
 $(call inherit-product, device/oppo/A37f/device.mk)
 
-PRODUCT_PACKAGES += \
-    charger_res_images \
-    charger
-    
-# Explicitly
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.hardware.keystore=msm8916
-
-# The kernel does not support aio with ffs.
-PRODUCT_PROPERTY_OVERRIDES += \
-	sys.usb.ffs.aio_compat=1    
-
 # Device identifier. This must come after all inclusions
-PRODUCT_DEVICE := A37f
-PRODUCT_NAME := omni_A37f
-PRODUCT_BRAND := Oppo
-PRODUCT_MODEL := A37f
-PRODUCT_MANUFACTURER := Oppo
-PRODUCT_RELEASE_NAME := Oppo A37f
+PRODUCT_DEVICE := $(PRODUCT_RELEASE_NAME)
+PRODUCT_NAME := $(CUSTOM_VENDOR)_$(PRODUCT_DEVICE)
+PRODUCT_BRAND := $(BOARD_VENDOR)
+PRODUCT_MODEL := $(shell echo $(PRODUCT_BRAND) | tr  '[:lower:]' '[:upper:]')_$(PRODUCT_DEVICE)
+PRODUCT_MANUFACTURER := $(PRODUCT_BRAND)
 
-# Enable stock zip packages flash
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    ro.build.product=A37f \
-    ro.product.device=A37f \
-    ro.product.model=A37f
-
-ALLOW_MISSING_DEPENDENCIES := true
