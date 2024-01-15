@@ -16,31 +16,14 @@
 
 LOCAL_PATH := device/oppo/A37f
 
-# TWRP specific build flags
-TW_DEFAULT_LANGUAGE := en-US
-TW_NO_USB_STORAGE := true
-BOARD_SUPPRESS_SECURE_ERASE := true
-BOARD_HAS_REMOVABLE_STORAGE := true
-TW_MAX_BRIGHTNESS := 100
-TW_DEFAULT_BRIGHTNESS := "70"
-BOARD_HAS_NO_REAL_SDCARD := true
-TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
-TW_IGNORE_ABS_MT_TRACKING_ID := true
-TW_USE_TOOLBOX := true
-TW_CRYPTO_USE_SBIN_VOLD := true
-TW_THEME := portrait_hdpi
-TW_INPUT_BLACKLIST := "hbtp_vm"
-
 PRODUCT_PACKAGES += \
     charger_res_images \
     charger
-    
+
 # Explicitly
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.hardware.keystore=msm8916
 
 # The kernel does not support aio with ffs.
 PRODUCT_PROPERTY_OVERRIDES += \
-	sys.usb.ffs.aio_compat=1    
-
-ALLOW_MISSING_DEPENDENCIES := true
+	sys.usb.ffs.aio_compat=1
